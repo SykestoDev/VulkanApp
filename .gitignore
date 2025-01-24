@@ -1,0 +1,25 @@
+# Ignore build artifacts
+*.o
+*.obj
+*.exe
+*.out
+*.log
+*.tmp
+*.bak
+
+# Ignore IDE-specific files
+.vs/
+.idea/
+*.vsidx
+*.suo
+*.user
+*.swp
+*.sln
+*.VC.db
+
+# Ignore Vulkan SDK cache
+C:/VulkanSDK/
+
+# Ignore anything in build folders
+build/
+ 
