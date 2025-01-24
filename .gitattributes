@@ -1,0 +1,5 @@
+*.pdb filter=lfs diff=lfs merge=lfs -text
+*.ilk filter=lfs diff=lfs merge=lfs -text
+*.iobj filter=lfs diff=lfs merge=lfs -text
+*.ipdb filter=lfs diff=lfs merge=lfs -text
+*.lib filter=lfs diff=lfs merge=lfs -text
