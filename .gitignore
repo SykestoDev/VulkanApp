@@ -9,6 +9,5 @@
 *.manifest
 
 # Ignore Debug and Release folders
-Debug/
-Release/
+x64/
  
