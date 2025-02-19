@@ -10,4 +10,4 @@
 
 # Ignore Debug and Release folders
 x64/
- 
+.vs/
