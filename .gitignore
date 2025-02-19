@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 # Ignore build artifacts
 *.o
 *.obj
@@ -22,3 +23,18 @@ C:/VulkanSDK/
 # Ignore anything in build folders
 build/
  
+=======
+# Ignore large debug and build files
+*.pdb
+*.ilk
+*.iobj
+*.ipdb
+*.lib
+*.exp
+*.dll
+*.manifest
+
+# Ignore Debug and Release folders
+x64/
+.vs/
+>>>>>>> Testing

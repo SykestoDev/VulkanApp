@@ -1,4 +1,8 @@
+<<<<<<< HEAD
 // Corresponding Header
+=======
+﻿// Corresponding Header
+>>>>>>> Testing
 #include "VulkanRenderer.h"  
 
 // Image Loader
@@ -18,23 +22,45 @@
  * @brief Implementation of VulkanRenderer methods for Vulkan initialization, rendering, and cleanup.
  */
 
+<<<<<<< HEAD
 
 
 // === Pubic Methods ===
+=======
+ // ---------------------------------------------------------------------------
+ // 1. Public Interface
+ // ---------------------------------------------------------------------------
+>>>>>>> Testing
 
 /**
  * @brief Runs the Vulkan application, initializing resources and entering the main loop.
  */
 void VulkanRenderer::Run() {
+<<<<<<< HEAD
+=======
+	// Initialize window, Vulkan, and ImGui
+>>>>>>> Testing
 	InitWindow();
 	InitVulkan();
 	InitImGui();
 
+<<<<<<< HEAD
 	camera = std::make_unique<Camera>(glm::vec3(0.0f, 0.0f, 3.0f));
 	MainLoop();
 	CleanUp();
 }
 
+=======
+	// Set up the camera.
+	camera = std::make_unique<Camera>(glm::vec3(0.0f, 0.0f, 3.0f));
+
+	// Enter the main rendering loop.
+	MainLoop();
+
+	// Clean up all allocated resources.
+	CleanUp();
+}
+>>>>>>> Testing
 /**
  * @brief Updates the application state based on input and delta time.
  *
@@ -43,16 +69,25 @@ void VulkanRenderer::Run() {
  * @param deltaTime The time elapsed since the last frame.
  */
 void VulkanRenderer::Update(float deltaTime) {
+<<<<<<< HEAD
 	glm::vec3 movement(0.0f);
 	static bool tabPressedLastFrame = false;
 	static bool key1PressedLastFrame = false;
 
+=======
+	// --- Toggle Cursor Lock with Escape Key ---
+	static bool tabPressedLastFrame = false;
+>>>>>>> Testing
 	if (glfwGetKey(window, GLFW_KEY_ESCAPE) == GLFW_PRESS) {
 		if (!tabPressedLastFrame) {
 			isCursorLocked = !isCursorLocked;
 			glfwSetInputMode(window, GLFW_CURSOR, isCursorLocked ? GLFW_CURSOR_DISABLED : GLFW_CURSOR_NORMAL);
 			if (isCursorLocked) {
+<<<<<<< HEAD
 				// Center the mouse cursor in the window
+=======
+				// Center the cursor when locking.
+>>>>>>> Testing
 				glfwSetCursorPos(window, WIDTH / 2.0, HEIGHT / 2.0);
 			}
 		}
@@ -62,7 +97,12 @@ void VulkanRenderer::Update(float deltaTime) {
 		tabPressedLastFrame = false;
 	}
 
+<<<<<<< HEAD
 	// Enable/Disable Wireframe/Fillmode
+=======
+	// --- Toggle Polygon Mode with Key 1 ---
+	static bool key1PressedLastFrame = false;
+>>>>>>> Testing
 	if (glfwGetKey(window, GLFW_KEY_1) == GLFW_PRESS) {
 		if (!key1PressedLastFrame) {
 			currentPolygonMode = (currentPolygonMode == VK_POLYGON_MODE_FILL) ?
@@ -74,6 +114,7 @@ void VulkanRenderer::Update(float deltaTime) {
 		key1PressedLastFrame = false;
 	}
 
+<<<<<<< HEAD
 	// Handle camera movement
 	if (glfwGetKey(window, GLFW_KEY_W) == GLFW_PRESS) camera->ProcessKeyboard(FORWARD, deltaTime);
 	if (glfwGetKey(window, GLFW_KEY_S) == GLFW_PRESS) camera->ProcessKeyboard(BACKWARD, deltaTime);
@@ -93,6 +134,50 @@ void VulkanRenderer::Update(float deltaTime) {
 
 
  // === Initialization Methods ===
+=======
+	// --- Handle Camera Movement ---
+	if (glfwGetKey(window, GLFW_KEY_W) == GLFW_PRESS)
+		camera->ProcessKeyboard(FORWARD, deltaTime);
+	if (glfwGetKey(window, GLFW_KEY_S) == GLFW_PRESS)
+		camera->ProcessKeyboard(BACKWARD, deltaTime);
+	if (glfwGetKey(window, GLFW_KEY_A) == GLFW_PRESS)
+		camera->ProcessKeyboard(LEFT, deltaTime);
+	if (glfwGetKey(window, GLFW_KEY_D) == GLFW_PRESS)
+		camera->ProcessKeyboard(RIGHT, deltaTime);
+	if (glfwGetKey(window, GLFW_KEY_SPACE) == GLFW_PRESS)
+		camera->ProcessKeyboard(UP, deltaTime);
+	if (glfwGetKey(window, GLFW_KEY_LEFT_CONTROL) == GLFW_PRESS)
+		camera->ProcessKeyboard(DOWN, deltaTime);
+}
+
+void VulkanRenderer::AddModel(const std::string& modelPath, const std::string& texturePath) {
+	try {
+		// Create a new model instance
+		auto newModel = std::make_unique<Model>(device, physicalDevice, graphicsQueue, commandPool);
+		newModel->LoadFromFile(modelPath);
+		newModel->LoadTexture(texturePath);
+
+		// Optionally set initial transformation values here
+		newModel->SetPosition(glm::vec3(0.0f));  // Example position
+
+		// Add the new model to your list
+		modelList.push_back(std::move(newModel));
+
+		// Update the descriptor sets to account for the new model.
+		// Depending on your current implementation, you may need to reallocate your descriptor sets.
+		CreateDescriptorSets();
+	}
+	catch (const std::exception& e) {
+		std::cerr << "Failed to add model: " << e.what() << "\n";
+	}
+}
+
+
+
+// ---------------------------------------------------------------------------
+// 1. Private Interface
+// ---------------------------------------------------------------------------
+>>>>>>> Testing
 
  /**
   * @brief Initializes the GLFW window for the Vulkan application.
@@ -103,19 +188,41 @@ void VulkanRenderer::Update(float deltaTime) {
   * @throws std::runtime_error if GLFW initialization or window creation fails.
   */
 void VulkanRenderer::InitWindow() {
+<<<<<<< HEAD
+=======
+	// Initialize GLFW and check for failure.
+>>>>>>> Testing
 	if (!glfwInit()) {
 		throw std::runtime_error("Failed to initialize GLFW");
 	}
 
+<<<<<<< HEAD
 	glfwWindowHint(GLFW_CLIENT_API, GLFW_NO_API);
 
 	window = glfwCreateWindow(WIDTH, HEIGHT, appName.c_str(), nullptr, nullptr);
+=======
+	// Tell GLFW not to create an OpenGL context.
+	glfwWindowHint(GLFW_CLIENT_API, GLFW_NO_API);
+
+	// Create the GLFW window with specified width, height, and title.
+	window = glfwCreateWindow(WIDTH, HEIGHT, APP_NAME, nullptr, nullptr);
+>>>>>>> Testing
 	if (!window) {
 		throw std::runtime_error("Failed to create GLFW window!");
 	}
 
+<<<<<<< HEAD
 	glfwSetWindowUserPointer(window, this);
 	glfwSetFramebufferSizeCallback(window, framebufferResizeCallback);
+=======
+	// Set the user pointer for callbacks.
+	glfwSetWindowUserPointer(window, this);
+
+	// Set the framebuffer resize callback.
+	glfwSetFramebufferSizeCallback(window, framebufferResizeCallback);
+
+	// Set the cursor position callback using a lambda to forward the event.
+>>>>>>> Testing
 	glfwSetCursorPosCallback(window, [](GLFWwindow* win, double xpos, double ypos) {
 		auto renderer = static_cast<VulkanRenderer*>(glfwGetWindowUserPointer(win));
 		renderer->MouseCallback(xpos, ypos);
@@ -128,11 +235,19 @@ void VulkanRenderer::InitImGui() {
 	IMGUI_CHECKVERSION();
 	ImGui::CreateContext();
 	ImGuiIO& io = ImGui::GetIO();
+<<<<<<< HEAD
 	io.ConfigFlags |= ImGuiConfigFlags_NavEnableKeyboard;
 	io.ConfigFlags |= ImGuiConfigFlags_NavEnableGamepad;
 
 	ImGui_ImplGlfw_InitForVulkan(window, true);
 
+=======
+	io.ConfigFlags |= ImGuiConfigFlags_NavEnableKeyboard | ImGuiConfigFlags_NavEnableGamepad;
+
+	ImGui_ImplGlfw_InitForVulkan(window, true);
+
+	// Initialize ImGui for Vulkan with a forced single sample (no multisampling)
+>>>>>>> Testing
 	ImGui_ImplVulkan_InitInfo init_info = {};
 	init_info.Instance = instance;
 	init_info.PhysicalDevice = physicalDevice;
@@ -144,10 +259,17 @@ void VulkanRenderer::InitImGui() {
 	init_info.Subpass = 0;
 	init_info.MinImageCount = 3;
 	init_info.ImageCount = static_cast<uint32_t>(swapChainImages.size());
+<<<<<<< HEAD
 	init_info.MSAASamples = msaaSamples;
 	init_info.Allocator = nullptr;
 	init_info.CheckVkResultFn = check_vk_result;
 	init_info.RenderPass = renderPass;
+=======
+	init_info.MSAASamples = VK_SAMPLE_COUNT_1_BIT;	// Force a single sample for IMGUI
+	init_info.Allocator = nullptr;
+	init_info.CheckVkResultFn = check_vk_result;
+	init_info.RenderPass = imguiRenderPass;			// Use the dedicated ImGui render pass
+>>>>>>> Testing
 
 	ImGui_ImplVulkan_Init(&init_info);
 	ImGui_ImplVulkan_CreateFontsTexture();
@@ -162,6 +284,10 @@ void VulkanRenderer::InitImGui() {
  * @throws std::runtime_error if any initialization step fails.
  */
 void VulkanRenderer::InitVulkan() {
+<<<<<<< HEAD
+=======
+	// Initialize Timing Information
+>>>>>>> Testing
 	startTime = std::chrono::high_resolution_clock::now();
 	lastFrameTime = startTime;
 
@@ -172,6 +298,7 @@ void VulkanRenderer::InitVulkan() {
 	GetPhysicalDevice();
 	CreateLogicalDevice();
 
+<<<<<<< HEAD
 	// Swap Chain and Rendering Setup
 	CreateSwapChain();
 	CreateImageViews();
@@ -180,14 +307,33 @@ void VulkanRenderer::InitVulkan() {
 	CreateGraphicsPipeline();
 
 	// Memory and Resources
+=======
+	// Swap Chain and Pipeline Setup
+	CreateSwapChain();
+	CreateImageViews();
+	CreateRenderPass();
+	CreateImGuiRenderPass();
+	CreateDescriptorSetLayout();
+	CreateGraphicsPipeline();
+
+	// Resource and Memory Setup
+>>>>>>> Testing
 	CreateCommandPool();
 	CreateColorResources();
 	CreateDepthResources();
 	CreateFramebuffers();
+<<<<<<< HEAD
 	CreateUniformBuffers();
 
 	// Model and Descriptor Setup
 	LoadModels();
+=======
+	CreateImGuiFramebuffers();
+	CreateUniformBuffers();
+
+	// Model and Descriptor Setup
+	LoadDefualtModels();
+>>>>>>> Testing
 	CreateDescriptorPool();
 	CreateDescriptorSets();
 
@@ -205,6 +351,7 @@ void VulkanRenderer::InitVulkan() {
  * It ensures the device is idle before exiting to complete all queued operations.
  */
 void VulkanRenderer::MainLoop() {
+<<<<<<< HEAD
 	while (!glfwWindowShouldClose(window)) { // Loop until the user closes the window.
 		glfwPollEvents();                   // Poll for window events (e.g., input, resize).
 
@@ -218,17 +365,39 @@ void VulkanRenderer::MainLoop() {
 		frameCount++;
 
 		// Update FPS every second
+=======
+	while (!glfwWindowShouldClose(window)) {
+		// Process window events (input, resize, etc.)
+		glfwPollEvents();
+
+		// Calculate delta time and total elapsed time.
+		auto currentTime = std::chrono::high_resolution_clock::now();
+		deltaTime = std::chrono::duration<float>(currentTime - lastFrameTime).count();
+		elapsedTime = std::chrono::duration<float>(currentTime - startTime).count();
+		lastFrameTime = currentTime;
+
+		// Update frame count.
+		frameCount++;
+
+		// Update FPS once per second.
+>>>>>>> Testing
 		static float fpsAccumulator = 0.0f;
 		static uint32_t fpsFrameCount = 0;
 		fpsAccumulator += deltaTime;
 		fpsFrameCount++;
+<<<<<<< HEAD
 
 		if (fpsAccumulator >= 1.0f) {
 			fps = fpsFrameCount / fpsAccumulator; // Calculate FPS
+=======
+		if (fpsAccumulator >= 1.0f) {
+			fps = static_cast<float>(fpsFrameCount) / fpsAccumulator;
+>>>>>>> Testing
 			fpsAccumulator = 0.0f;
 			fpsFrameCount = 0;
 		}
 
+<<<<<<< HEAD
 		// Process input and update the camera
 		Update(deltaTime);
 
@@ -237,6 +406,14 @@ void VulkanRenderer::MainLoop() {
 
 	// Wait for the device to finish all operations before exiting.
 	//vkDeviceWaitIdle(device);
+=======
+		// Process input and update camera or other state.
+		Update(deltaTime);
+
+		// Render the current frame.
+		DrawFrame();
+	}
+>>>>>>> Testing
 }
 /**
  * @brief Cleans up all Vulkan and application resources.
@@ -249,11 +426,21 @@ void VulkanRenderer::CleanUp() {
 	// Wait for the device to finish all pending operations.
 	vkDeviceWaitIdle(device);
 
+<<<<<<< HEAD
 	// Clean up GUI 
+=======
+	// --- Clean up IMGUI resources ---
+	// Destroy the IMGUI render pass.
+	if (imguiRenderPass != VK_NULL_HANDLE) {
+		vkDestroyRenderPass(device, imguiRenderPass, nullptr);
+	}
+	// Shut down the ImGui Vulkan and GLFW implementations and destroy the context.
+>>>>>>> Testing
 	ImGui_ImplVulkan_Shutdown();
 	ImGui_ImplGlfw_Shutdown();
 	ImGui::DestroyContext();
 
+<<<<<<< HEAD
 	// Clean up models and their resources.
 	for (auto& model : modelList) {
 		model.reset(); // Calls the destructor of Model.
@@ -263,6 +450,17 @@ void VulkanRenderer::CleanUp() {
 	CleanupSwapChain();
 
 	// Destroy pipeline and rendering resources.
+=======
+	// --- Clean up model resources ---
+	for (auto& model : modelList) {
+		model.reset(); // Releases each model.
+	}
+
+	// --- Clean up swapchain-specific resources ---
+	CleanupSwapChain();
+
+	// --- Destroy pipeline and render resources ---
+>>>>>>> Testing
 	if (graphicsPipeline != VK_NULL_HANDLE) {
 		vkDestroyPipeline(device, graphicsPipeline, nullptr);
 	}
@@ -273,7 +471,11 @@ void VulkanRenderer::CleanUp() {
 		vkDestroyRenderPass(device, renderPass, nullptr);
 	}
 
+<<<<<<< HEAD
 	// Clean up frame-specific resources (semaphores, fences, and buffers).
+=======
+	// --- Clean up per-frame resources (semaphores, fences, uniform buffers) ---
+>>>>>>> Testing
 	for (size_t i = 0; i < swapChainImages.size(); i++) {
 		if (renderFinishedSemaphores[i] != VK_NULL_HANDLE) {
 			vkDestroySemaphore(device, renderFinishedSemaphores[i], nullptr);
@@ -292,7 +494,11 @@ void VulkanRenderer::CleanUp() {
 		}
 	}
 
+<<<<<<< HEAD
 	// Destroy descriptor resources (pool and layout).
+=======
+	// --- Destroy descriptor resources ---
+>>>>>>> Testing
 	if (descriptorPool != VK_NULL_HANDLE) {
 		vkDestroyDescriptorPool(device, descriptorPool, nullptr);
 	}
@@ -300,32 +506,56 @@ void VulkanRenderer::CleanUp() {
 		vkDestroyDescriptorSetLayout(device, descriptorSetLayout, nullptr);
 	}
 
+<<<<<<< HEAD
 	// Destroy the command pool.
+=======
+	// --- Destroy the command pool ---
+>>>>>>> Testing
 	if (commandPool != VK_NULL_HANDLE) {
 		vkDestroyCommandPool(device, commandPool, nullptr);
 	}
 
+<<<<<<< HEAD
 	// Destroy the Vulkan logical device.
+=======
+	// --- Destroy the Vulkan logical device ---
+>>>>>>> Testing
 	if (device != VK_NULL_HANDLE) {
 		vkDestroyDevice(device, nullptr);
 	}
 
+<<<<<<< HEAD
 	// Destroy the debug messenger if validation layers are enabled.
+=======
+	// --- Destroy the debug messenger (if enabled) ---
+>>>>>>> Testing
 	if (enableValidationLayer && debugMessenger != VK_NULL_HANDLE) {
 		DestroyDebugUtilsMessengerEXT(instance, debugMessenger, nullptr);
 	}
 
+<<<<<<< HEAD
 	// Destroy the Vulkan surface.
+=======
+	// --- Destroy the Vulkan surface ---
+>>>>>>> Testing
 	if (surface != VK_NULL_HANDLE) {
 		vkDestroySurfaceKHR(instance, surface, nullptr);
 	}
 
+<<<<<<< HEAD
 	// Destroy the Vulkan instance.
+=======
+	// --- Destroy the Vulkan instance ---
+>>>>>>> Testing
 	if (instance != VK_NULL_HANDLE) {
 		vkDestroyInstance(instance, nullptr);
 	}
 
+<<<<<<< HEAD
 	// Destroy the GLFW window and terminate GLFW.
+=======
+	// --- Clean up the GLFW window and terminate GLFW ---
+>>>>>>> Testing
 	if (window) {
 		glfwDestroyWindow(window);
 		glfwTerminate();
@@ -335,7 +565,10 @@ void VulkanRenderer::CleanUp() {
 
 
 
+<<<<<<< HEAD
 
+=======
+>>>>>>> Testing
 /**
  * @brief Creates the Vulkan instance.
  *
@@ -355,7 +588,11 @@ void VulkanRenderer::CreateInstance() {
 	// Populate application information structure.
 	VkApplicationInfo appInfo{};
 	appInfo.sType = VK_STRUCTURE_TYPE_APPLICATION_INFO;     // Specify the structure type.
+<<<<<<< HEAD
 	appInfo.pApplicationName = appName.c_str();             // Application name.
+=======
+	appInfo.pApplicationName = APP_NAME;             // Application name.
+>>>>>>> Testing
 	appInfo.applicationVersion = VK_MAKE_VERSION(1, 0, 0);  // Application version.
 	appInfo.pEngineName = "N/A";                            // Engine name (not using an engine).
 	appInfo.engineVersion = VK_MAKE_VERSION(1, 0, 0);       // Engine version.
@@ -613,8 +850,11 @@ void VulkanRenderer::CreateSwapChain() {
 	swapChainImages.resize(imageCount);
 	vkGetSwapchainImagesKHR(device, swapChain, &imageCount, swapChainImages.data());
 }
+<<<<<<< HEAD
 
 
+=======
+>>>>>>> Testing
 /**
  * @brief Creates image views for the swap chain images.
  *
@@ -661,6 +901,25 @@ void VulkanRenderer::CreateRenderPass() {
 	VkAttachmentReference colorAttachmentRef{};
 	colorAttachmentRef.attachment = 0;                                     // Index of the attachment in the attachment array.
 	colorAttachmentRef.layout = VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL;  // Layout during rendering.
+<<<<<<< HEAD
+=======
+
+	// Configure the depth attachment.
+	VkAttachmentDescription depthAttachment{};
+	depthAttachment.format = FindDepthFormat();                                     // Find a suitable format for the depth attachment.
+	depthAttachment.samples = msaaSamples;                                          // Use multisampling for depth.
+	depthAttachment.loadOp = VK_ATTACHMENT_LOAD_OP_CLEAR;                           // Clear the depth buffer at the start of rendering.
+	depthAttachment.storeOp = VK_ATTACHMENT_STORE_OP_DONT_CARE;                     // Depth data is not needed after rendering.
+	depthAttachment.stencilLoadOp = VK_ATTACHMENT_LOAD_OP_DONT_CARE;                // No stencil operations.
+	depthAttachment.stencilStoreOp = VK_ATTACHMENT_STORE_OP_DONT_CARE;
+	depthAttachment.initialLayout = VK_IMAGE_LAYOUT_UNDEFINED;                      // Layout before rendering.
+	depthAttachment.finalLayout = VK_IMAGE_LAYOUT_DEPTH_STENCIL_ATTACHMENT_OPTIMAL; // Layout for depth rendering.
+
+	// Reference the depth attachment in the subpass.
+	VkAttachmentReference depthAttachmentRef{};
+	depthAttachmentRef.attachment = 1; // Index of the depth attachment.
+	depthAttachmentRef.layout = VK_IMAGE_LAYOUT_DEPTH_STENCIL_ATTACHMENT_OPTIMAL;
+>>>>>>> Testing
 	
 	// Configure the resolve attachment (for resolving MSAA to a non-MSAA image).
 	VkAttachmentDescription colorAttachmentResolve{};
@@ -678,6 +937,7 @@ void VulkanRenderer::CreateRenderPass() {
 	colorAttachmentResolveRef.attachment = 2;  // Index of the resolve attachment.
 	colorAttachmentResolveRef.layout = VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL;
 
+<<<<<<< HEAD
 	// Configure the depth attachment.
 	VkAttachmentDescription depthAttachment{};
 	depthAttachment.format = FindDepthFormat();                                     // Find a suitable format for the depth attachment.
@@ -693,6 +953,8 @@ void VulkanRenderer::CreateRenderPass() {
 	VkAttachmentReference depthAttachmentRef{};
 	depthAttachmentRef.attachment = 1; // Index of the depth attachment.
 	depthAttachmentRef.layout = VK_IMAGE_LAYOUT_DEPTH_STENCIL_ATTACHMENT_OPTIMAL;
+=======
+>>>>>>> Testing
 
 	// Configure the subpass.
 	VkSubpassDescription subpass{};
@@ -734,6 +996,40 @@ void VulkanRenderer::CreateRenderPass() {
 		throw std::runtime_error("Failed to create render pass!");
 	}
 }
+<<<<<<< HEAD
+=======
+void VulkanRenderer::CreateImGuiRenderPass() {
+	VkAttachmentDescription colorAttachment{};
+	colorAttachment.format = swapChainImageFormat;
+	colorAttachment.samples = VK_SAMPLE_COUNT_1_BIT;			// Use a single sample for ImGui
+	colorAttachment.loadOp = VK_ATTACHMENT_LOAD_OP_LOAD;		// Use LOAD to preserve the previously rendered scene
+	colorAttachment.storeOp = VK_ATTACHMENT_STORE_OP_STORE;
+	colorAttachment.stencilLoadOp = VK_ATTACHMENT_LOAD_OP_DONT_CARE;
+	colorAttachment.stencilStoreOp = VK_ATTACHMENT_STORE_OP_DONT_CARE;
+	colorAttachment.initialLayout = VK_IMAGE_LAYOUT_PRESENT_SRC_KHR;
+	colorAttachment.finalLayout = VK_IMAGE_LAYOUT_PRESENT_SRC_KHR;
+
+	VkAttachmentReference colorAttachmentRef{};
+	colorAttachmentRef.attachment = 0;
+	colorAttachmentRef.layout = VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL;
+
+	VkSubpassDescription subpass{};
+	subpass.pipelineBindPoint = VK_PIPELINE_BIND_POINT_GRAPHICS;
+	subpass.colorAttachmentCount = 1;
+	subpass.pColorAttachments = &colorAttachmentRef;
+
+	VkRenderPassCreateInfo renderPassInfo{};
+	renderPassInfo.sType = VK_STRUCTURE_TYPE_RENDER_PASS_CREATE_INFO;
+	renderPassInfo.attachmentCount = 1;
+	renderPassInfo.pAttachments = &colorAttachment;
+	renderPassInfo.subpassCount = 1;
+	renderPassInfo.pSubpasses = &subpass;
+
+	if (vkCreateRenderPass(device, &renderPassInfo, nullptr, &imguiRenderPass) != VK_SUCCESS) {
+		throw std::runtime_error("Failed to create ImGui render pass!");
+	}
+}
+>>>>>>> Testing
 /**
  * @brief Creates the descriptor set layout.
  *
@@ -953,9 +1249,15 @@ void VulkanRenderer::CreateFramebuffers() {
 	for (size_t i = 0; i < swapChainImageViews.size(); i++) {
 		// Specify the attachments for this framebuffer (color, depth, and swap chain image).
 		std::array<VkImageView, 3> attachments = {
+<<<<<<< HEAD
 			colorImageView,         // Resolve attachment (for MSAA color image).
 			depthImageView,         // Depth attachment (for depth testing).
 			swapChainImageViews[i]  // Swap chain image (final output to screen).
+=======
+			colorImageView,          // Resolve attachment (for MSAA color image).
+			depthImageView,          // Depth attachment (for depth testing).
+			swapChainImageViews[i]   // Swap chain image (final output to screen).
+>>>>>>> Testing
 		};
 
 		// Configure the framebuffer creation information.
@@ -974,6 +1276,29 @@ void VulkanRenderer::CreateFramebuffers() {
 		}
 	}
 }
+<<<<<<< HEAD
+=======
+void VulkanRenderer::CreateImGuiFramebuffers() {
+	imguiFramebuffers.resize(swapChainImageViews.size());
+
+	for (size_t i = 0; i < swapChainImageViews.size(); i++) {
+		VkImageView attachments[] = { swapChainImageViews[i] };
+
+		VkFramebufferCreateInfo framebufferInfo{};
+		framebufferInfo.sType = VK_STRUCTURE_TYPE_FRAMEBUFFER_CREATE_INFO;
+		framebufferInfo.renderPass = imguiRenderPass;
+		framebufferInfo.attachmentCount = 1;
+		framebufferInfo.pAttachments = attachments;
+		framebufferInfo.width = swapChainExtent.width;
+		framebufferInfo.height = swapChainExtent.height;
+		framebufferInfo.layers = 1;
+
+		if (vkCreateFramebuffer(device, &framebufferInfo, nullptr, &imguiFramebuffers[i]) != VK_SUCCESS) {
+			throw std::runtime_error("Failed to create ImGui framebuffer!");
+		}
+	}
+}
+>>>>>>> Testing
 /**
  * @brief Creates the command pool for managing command buffer allocation.
  *
@@ -1144,6 +1469,7 @@ void VulkanRenderer::CreateUniformBuffers() {
  * @throws std::runtime_error if the descriptor pool parameters are invalid or pool creation fails.
  */
 void VulkanRenderer::CreateDescriptorPool() {
+<<<<<<< HEAD
 	// Define the descriptor pool sizes
 	std::vector<VkDescriptorPoolSize> poolSizes = {
 		// Uniform buffers
@@ -1153,6 +1479,18 @@ void VulkanRenderer::CreateDescriptorPool() {
 		{ VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER, static_cast<uint32_t>(swapChainImages.size() * modelList.size()) },
 
 		// Additional types for ImGui and other resources
+=======
+	// Use at least 1 as the model count to avoid 0 descriptors.
+	uint32_t modelCount = modelList.empty() ? 1 : static_cast<uint32_t>(modelList.size());
+	uint32_t imageCount = static_cast<uint32_t>(swapChainImages.size());
+
+	std::vector<VkDescriptorPoolSize> poolSizes = {
+		// Uniform buffers for each frame-model combination.
+		{ VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER, imageCount * modelCount },
+		// Combined image samplers for each frame-model combination.
+		{ VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER, imageCount * modelCount },
+		// Additional descriptors for IMGUI and other resources.
+>>>>>>> Testing
 		{ VK_DESCRIPTOR_TYPE_SAMPLED_IMAGE, 100 },
 		{ VK_DESCRIPTOR_TYPE_STORAGE_IMAGE, 100 },
 		{ VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER_DYNAMIC, 100 },
@@ -1164,7 +1502,11 @@ void VulkanRenderer::CreateDescriptorPool() {
 	poolInfo.sType = VK_STRUCTURE_TYPE_DESCRIPTOR_POOL_CREATE_INFO;
 	poolInfo.poolSizeCount = static_cast<uint32_t>(poolSizes.size());
 	poolInfo.pPoolSizes = poolSizes.data();
+<<<<<<< HEAD
 	poolInfo.maxSets = static_cast<uint32_t>(swapChainImages.size() * modelList.size()) + 500; // Add extra capacity for ImGui and other resources
+=======
+	poolInfo.maxSets = imageCount * modelCount + 500;					// Add extra capacity for ImGui and other resources
+>>>>>>> Testing
 	poolInfo.flags = VK_DESCRIPTOR_POOL_CREATE_FREE_DESCRIPTOR_SET_BIT; // Enable freeing individual sets
 
 	// Validate descriptor pool parameters.
@@ -1187,7 +1529,12 @@ void VulkanRenderer::CreateDescriptorPool() {
  */
 void VulkanRenderer::CreateDescriptorSets() {
 	// Resize the descriptor sets vector to accommodate all frames and models.
+<<<<<<< HEAD
 	descriptorSets.resize(swapChainImages.size() * modelList.size());
+=======
+	uint32_t modelCount = modelList.empty() ? 1 : static_cast<uint32_t>(modelList.size());
+	descriptorSets.resize(swapChainImages.size() * modelCount);
+>>>>>>> Testing
 
 	// Create a list of descriptor set layouts for allocation.
 	std::vector<VkDescriptorSetLayout> layouts(descriptorSets.size(), descriptorSetLayout);
@@ -1286,7 +1633,10 @@ void VulkanRenderer::CreateCommandBuffers() {
 		throw std::runtime_error("Failed to allocate command buffers!");
 	}
 }
+<<<<<<< HEAD
 
+=======
+>>>>>>> Testing
 /**
  * @brief Creates synchronization objects for rendering.
  *
@@ -1325,7 +1675,70 @@ void VulkanRenderer::CreateSyncObjects() {
 
 
 
+<<<<<<< HEAD
 
+=======
+void VulkanRenderer::RenderImGui(VkCommandBuffer commandBuffer, uint32_t imageIndex) {
+	ImGui_ImplVulkan_NewFrame();
+	ImGui_ImplGlfw_NewFrame();
+	ImGui::NewFrame();
+
+	ImGui::GetIO().FontGlobalScale = 1.5f; // Scale text size (default is 1.0f)
+
+	// === Performance Metrics Panel ===
+	ImGui::Begin("Performance Metrics");
+	ImGui::Text("FPS: %.2f", fps);
+	ImGui::Text("Frame Time: %.3f ms", deltaTime * 1000.0f);
+	ImGui::Text("Elapsed Time: %.2f s", elapsedTime);
+	ImGui::Text("Frame Count: %llu", frameCount);
+	ImGui::Text("# of Models: %llu", modelList.size());
+	// --- New Add Model Button ---
+	if (ImGui::Button("Add Model")) {
+		// Here we use default paths; you could also allow the user to input a path.
+		AddModel(MODEL_PATH, TEXTURE_PATH);
+	}
+	if (ImGui::Button("Quit")) {
+		glfwSetWindowShouldClose(window, GLFW_TRUE);
+	}
+	ImGui::End();
+
+	// === Models Debug Info Panel ===
+	ImGui::Begin("Models Debug Info");
+	for (size_t i = 0; i < modelList.size(); ++i) {
+		const auto& model = modelList[i];
+		glm::mat4 modelMatrix = model->GetModelMatrix();
+
+		ImGui::Text("Model %zu Matrix:", i + 1);
+		for (int row = 0; row < 4; ++row) {
+			ImGui::Text("[ %.2f, %.2f, %.2f, %.2f ]",
+				modelMatrix[row][0], modelMatrix[row][1],
+				modelMatrix[row][2], modelMatrix[row][3]);
+		}
+		ImGui::Separator();
+	}
+	ImGui::End();
+	ImGui::Render();  // Ensures ImGui prepares its draw data
+
+
+	// Create RenderPass for GUI 
+	VkRenderPassBeginInfo imguiRenderPassInfo{};
+	imguiRenderPassInfo.sType = VK_STRUCTURE_TYPE_RENDER_PASS_BEGIN_INFO;
+	imguiRenderPassInfo.renderPass = imguiRenderPass;
+	imguiRenderPassInfo.framebuffer = imguiFramebuffers[imageIndex];
+	imguiRenderPassInfo.renderArea.offset = { 0, 0 };
+	imguiRenderPassInfo.renderArea.extent = swapChainExtent;
+
+	VkClearValue clearValue = { 0.0f, 0.0f, 0.0f, 0.0f };
+	imguiRenderPassInfo.clearValueCount = 1;
+	imguiRenderPassInfo.pClearValues = &clearValue;
+
+	vkCmdBeginRenderPass(commandBuffer, &imguiRenderPassInfo, VK_SUBPASS_CONTENTS_INLINE);
+
+	ImGui_ImplVulkan_RenderDrawData(ImGui::GetDrawData(), commandBuffer);
+
+	vkCmdEndRenderPass(commandBuffer);
+}
+>>>>>>> Testing
 /**
  * @brief Loads and configures 3D models for rendering.
  *
@@ -1335,6 +1748,7 @@ void VulkanRenderer::CreateSyncObjects() {
  *
  * @throws std::runtime_error if loading model data or textures fails.
  */
+<<<<<<< HEAD
 void VulkanRenderer::LoadModels() {
 	// Create unique pointers for the models.
 	std::unique_ptr<Model> model0;
@@ -1343,12 +1757,21 @@ void VulkanRenderer::LoadModels() {
 	// Initialize models with device and rendering resources.
 	model0 = std::make_unique<Model>(device, physicalDevice, graphicsQueue, commandPool);
 	model1 = std::make_unique<Model>(device, physicalDevice, graphicsQueue, commandPool);
+=======
+void VulkanRenderer::LoadDefualtModels() {
+	// Create unique pointers for the models.
+	std::unique_ptr<Model> model0;
+
+	// Initialize models with device and rendering resources.
+	model0 = std::make_unique<Model>(device, physicalDevice, graphicsQueue, commandPool);
+>>>>>>> Testing
 
 	// Model 1 defaults
 	model0->SetPosition(glm::vec3(0.50f, 0.00f, 0.00f));
 	model0->SetScale(glm::vec3(0.50f, 0.50f, 0.50f));
 	model0->SetRotation(glm::vec3(0.0f, 0.0f, 0.0f));
 
+<<<<<<< HEAD
 	// Model 2 defaults
 	model1->SetPosition(glm::vec3(-0.50f, 0.00f, 0.00f));
 	model1->SetScale(glm::vec3(1.00f, 1.00f, 1.00f));
@@ -1367,6 +1790,16 @@ void VulkanRenderer::LoadModels() {
 		// Add the models to the rendering model list.
 		modelList.push_back(std::move(model0));
 		modelList.push_back(std::move(model1));
+=======
+
+	try {
+		// Load geometry data for the models.
+		model0->LoadFromFile(MODEL_PATH.c_str());   // Load geometry for the second model.
+		model0->LoadTexture(TEXTURE_PATH.c_str());  // Load texture for the second model.
+
+		// Add the models to the rendering model list.
+		//modelList.push_back(std::move(model0));
+>>>>>>> Testing
 	}
 	catch (const std::runtime_error& e) {
 		// Throw an error if loading fails, with details about the failure.
@@ -1400,6 +1833,7 @@ void VulkanRenderer::UpdateUniformBuffer(uint32_t currentImage) {
 	// Invert the Y-axis in the projection matrix to match Vulkan's coordinate system
 	ubo.proj[1][1] *= -1;
 
+<<<<<<< HEAD
 	/*
 	PrintMatrix(ubo.view, "View");
 	PrintMatrix(ubo.proj, "Proj");
@@ -1432,6 +1866,8 @@ void VulkanRenderer::UpdateUniformBuffer(uint32_t currentImage) {
 	PrintMatrix(ubo.proj, "Proj");
 	*/
 
+=======
+>>>>>>> Testing
 	// Copy the uniform buffer object data to the mapped memory for the current frame.
 	memcpy(uniformBuffersMapped[currentImage], &ubo, sizeof(ubo));
 }
@@ -1458,7 +1894,11 @@ void VulkanRenderer::RecordCommandBuffer(VkCommandBuffer commandBuffer, uint32_t
 		throw std::runtime_error("Failed to begin recording command buffer!");
 	}
 
+<<<<<<< HEAD
 	// Configure the render pass begin info.
+=======
+	// Configure main render pass begin info.
+>>>>>>> Testing
 	VkRenderPassBeginInfo renderPassInfo{};
 	renderPassInfo.sType = VK_STRUCTURE_TYPE_RENDER_PASS_BEGIN_INFO;  // Specify the structure type.
 	renderPassInfo.renderPass = renderPass;                           // Render pass to use.
@@ -1466,6 +1906,7 @@ void VulkanRenderer::RecordCommandBuffer(VkCommandBuffer commandBuffer, uint32_t
 	renderPassInfo.renderArea.offset = { 0, 0 };                      // Render from the top-left corner.
 	renderPassInfo.renderArea.extent = swapChainExtent;               // Render to the full extent of the swap chain image.
 
+<<<<<<< HEAD
 	// Define clear values for the color and depth buffers.
 	std::array<VkClearValue, 2> clearValues{};
 	clearValues[0].color = { 0.0f, 0.0f, 0.0f, 0.0f };  // Clear color buffer to the background color.
@@ -1480,6 +1921,29 @@ void VulkanRenderer::RecordCommandBuffer(VkCommandBuffer commandBuffer, uint32_t
 	float color[4] = { 0.0f, 1.0f, 0.0f, 1.0f }; // Green for geometry pass
 	BeginDebugMarker(device, commandBuffer, "Geometry Pass", color);
 
+=======
+	
+	// Define clear values for the color and depth buffers.
+	std::array<VkClearValue, 3> clearValues = { {
+		{ { 0.0f, 0.0f, 0.0f, 1.0f } },		// Color clear value
+		{ 1.0f, 0 },						// Depth must be between 0.0 and 1.0
+		{ { 0.0f, 0.0f, 0.0f, 1.0f } }		// Resolve attachment clear
+	} };
+	renderPassInfo.clearValueCount = static_cast<uint32_t>(clearValues.size());
+	renderPassInfo.pClearValues = clearValues.data();
+
+	// RenderDoc Dubeg Tag for geomotry pass
+	float color[4] = { 0.0f, 1.0f, 0.0f, 1.0f }; // Green for geometry pass
+	BeginDebugMarker(device, commandBuffer, "Geometry Pass", color);
+
+	// Begin the render pass.
+	vkCmdBeginRenderPass(commandBuffer, &renderPassInfo, VK_SUBPASS_CONTENTS_INLINE);
+	// Bind the graphics pipeline.
+	vkCmdBindPipeline(commandBuffer, VK_PIPELINE_BIND_POINT_GRAPHICS, graphicsPipeline);
+	// Set the polygon mode dynamically
+	SetPolygonMode(commandBuffer, currentPolygonMode);
+
+>>>>>>> Testing
 	// Set up the viewport for rendering.
 	VkViewport viewport{};
 	viewport.x = 0.0f;
@@ -1496,6 +1960,7 @@ void VulkanRenderer::RecordCommandBuffer(VkCommandBuffer commandBuffer, uint32_t
 	scissor.extent = swapChainExtent;
 	vkCmdSetScissor(commandBuffer, 0, 1, &scissor);
 
+<<<<<<< HEAD
 	// Bind the graphics pipeline.
 	vkCmdBindPipeline(commandBuffer, VK_PIPELINE_BIND_POINT_GRAPHICS, graphicsPipeline);
 
@@ -1512,11 +1977,23 @@ void VulkanRenderer::RecordCommandBuffer(VkCommandBuffer commandBuffer, uint32_t
 		// Calculate the descriptor set index.
 		size_t descriptorIndex = imageIndex * modelList.size() + modelIndex;
 
+=======
+	// Record draw commands for each model.
+	const size_t numModels = modelList.size();
+	for (size_t i = 0; i < numModels; i++) {
+		const auto& currModel = modelList[i].get();
+		// Bind the vertex and index buffers for the model.
+		currModel->Bind(commandBuffer);
+
+		// Calculate the descriptor set index.
+		size_t descriptorIndex = imageIndex * modelList.size() + i;
+>>>>>>> Testing
 		// Validate the descriptor index.
 		if (descriptorIndex >= descriptorSets.size()) {
 			throw std::runtime_error("Descriptor index out of bounds!");
 		}
 
+<<<<<<< HEAD
 		VkDescriptorSet descriptorSet = descriptorSets[descriptorIndex];
 
 		// Bind the descriptor set.
@@ -1529,10 +2006,17 @@ void VulkanRenderer::RecordCommandBuffer(VkCommandBuffer commandBuffer, uint32_t
 			&descriptorSet,
 			0,
 			nullptr
+=======
+		// Bind the descriptor set.
+		vkCmdBindDescriptorSets(commandBuffer, VK_PIPELINE_BIND_POINT_GRAPHICS,
+			pipelineLayout, 0, 1, &descriptorSets[descriptorIndex],
+			0, nullptr
+>>>>>>> Testing
 		);
 
 		// Push constants for the model matrix.
 		PushConstants pushConstants{};
+<<<<<<< HEAD
 		pushConstants.model = model->GetModelMatrix();
 		vkCmdPushConstants(commandBuffer, pipelineLayout, VK_SHADER_STAGE_VERTEX_BIT, 0, sizeof(PushConstants), &pushConstants);
 
@@ -1593,6 +2077,22 @@ void VulkanRenderer::RecordCommandBuffer(VkCommandBuffer commandBuffer, uint32_t
 	// End the render pass.
 	vkCmdEndRenderPass(commandBuffer);
 
+=======
+		pushConstants.model = currModel->GetModelMatrix();
+		vkCmdPushConstants(commandBuffer, pipelineLayout, VK_SHADER_STAGE_VERTEX_BIT, 0, sizeof(PushConstants), &pushConstants);
+
+		// Issue the draw command for the model.
+		currModel->Draw(commandBuffer);
+	}
+
+	EndDebugMarker(device, commandBuffer);
+	// End the render pass.
+	vkCmdEndRenderPass(commandBuffer);
+
+	// Render the IMGUI overlay.
+	RenderImGui(commandBuffer, imageIndex);
+
+>>>>>>> Testing
 	// Finish recording commands into the command buffer.
 	if (vkEndCommandBuffer(commandBuffer) != VK_SUCCESS) {
 		throw std::runtime_error("Failed to record command buffer!");
@@ -1749,7 +2249,10 @@ void VulkanRenderer::AssignDebugNames() {
 		SetObjectName(device, (uint64_t)renderFinishedSemaphores[i], VK_OBJECT_TYPE_SEMAPHORE, name.c_str());
 	}
 }
+<<<<<<< HEAD
 
+=======
+>>>>>>> Testing
 /**
  * @brief Retrieves the required Vulkan instance extensions.
  *
@@ -1939,8 +2442,11 @@ bool VulkanRenderer::IsDeviceSuitable(VkPhysicalDevice device) {
 		   swapChainAdequate &&     // Swap chain supports at least one format and present mode.
 		   supportsAnisotropy;      // Anisotropic filtering is supported.
 }
+<<<<<<< HEAD
 
 
+=======
+>>>>>>> Testing
 /**
  * @brief Finds queue families on the physical device that support required operations.
  *
@@ -2026,8 +2532,11 @@ VulkanRenderer::SwapChainSupportDetails VulkanRenderer::QuerySwapChainSupport(Vk
 
 	return details; // Return the swap chain support details.
 }
+<<<<<<< HEAD
 
 
+=======
+>>>>>>> Testing
 /**
  * @brief Chooses the best surface format for the swap chain from available options.
  *
@@ -2039,7 +2548,11 @@ VulkanRenderer::SwapChainSupportDetails VulkanRenderer::QuerySwapChainSupport(Vk
  *
  * @return VkSurfaceFormatKHR The selected surface format.
  */
+<<<<<<< HEAD
 VkSurfaceFormatKHR VulkanRenderer::ChooseSwapSurfaceFormat(std::vector<VkSurfaceFormatKHR>& availableFormats) {
+=======
+VkSurfaceFormatKHR VulkanRenderer::ChooseSwapSurfaceFormat(const std::vector<VkSurfaceFormatKHR>& availableFormats) {
+>>>>>>> Testing
 	// Iterate through the available formats to find the preferred one.
 	for (const auto& availableFormat : availableFormats) {
 		// Check if the format is VK_FORMAT_B8G8R8A8_SRGB with SRGB color space.
@@ -2144,8 +2657,11 @@ VkShaderModule VulkanRenderer::CreateShaderModule(const std::vector<char>& code)
 
 	return shaderModule;  // Return the created shader module.
 }
+<<<<<<< HEAD
 
 
+=======
+>>>>>>> Testing
 /**
  * @brief Recreates the swap chain and its associated resources.
  *
@@ -2176,6 +2692,10 @@ void VulkanRenderer::RecreateSwapChain() {
 	CreateColorResources();  // Recreate resources for multisampling (if enabled).
 	CreateDepthResources();  // Recreate the depth buffer resources.
 	CreateFramebuffers();    // Recreate framebuffers for the swap chain.
+<<<<<<< HEAD
+=======
+	CreateImGuiFramebuffers();
+>>>>>>> Testing
 }
 /**
  * @brief Cleans up resources associated with the swap chain.
@@ -2185,6 +2705,7 @@ void VulkanRenderer::RecreateSwapChain() {
  * cleanup before recreating or destroying the swap chain.
  */
 void VulkanRenderer::CleanupSwapChain() {
+<<<<<<< HEAD
 	// Destroy the color image resources (if multisampling is enabled).
 	vkDestroyImageView(device, colorImageView, nullptr);  // Destroy the color image view.
 	vkDestroyImage(device, colorImage, nullptr);          // Destroy the color image.
@@ -2210,6 +2731,52 @@ void VulkanRenderer::CleanupSwapChain() {
 }
 
 
+=======
+	// --- Clean up IMGUI framebuffers ---
+	for (auto framebuffer : imguiFramebuffers) {
+		if (framebuffer != VK_NULL_HANDLE) {
+			vkDestroyFramebuffer(device, framebuffer, nullptr);
+		}
+	}
+	imguiFramebuffers.clear();
+
+	// --- Clean up color image resources (for multisampling) ---
+	if (colorImageView != VK_NULL_HANDLE)
+		vkDestroyImageView(device, colorImageView, nullptr);
+	if (colorImage != VK_NULL_HANDLE)
+		vkDestroyImage(device, colorImage, nullptr);
+	if (colorImageMemory != VK_NULL_HANDLE)
+		vkFreeMemory(device, colorImageMemory, nullptr);
+
+	// --- Clean up depth resources ---
+	if (depthImageView != VK_NULL_HANDLE)
+		vkDestroyImageView(device, depthImageView, nullptr);
+	if (depthImage != VK_NULL_HANDLE)
+		vkDestroyImage(device, depthImage, nullptr);
+	if (depthImageMemory != VK_NULL_HANDLE)
+		vkFreeMemory(device, depthImageMemory, nullptr);
+
+	// --- Destroy all swap chain framebuffers ---
+	for (auto framebuffer : swapChainFramebuffers) {
+		if (framebuffer != VK_NULL_HANDLE) {
+			vkDestroyFramebuffer(device, framebuffer, nullptr);
+		}
+	}
+	swapChainFramebuffers.clear();
+
+	// --- Destroy all swap chain image views ---
+	for (auto imageView : swapChainImageViews) {
+		if (imageView != VK_NULL_HANDLE) {
+			vkDestroyImageView(device, imageView, nullptr);
+		}
+	}
+	swapChainImageViews.clear();
+
+	// --- Destroy the swap chain itself ---
+	if (swapChain != VK_NULL_HANDLE)
+		vkDestroySwapchainKHR(device, swapChain, nullptr);
+}
+>>>>>>> Testing
 /**
  * @brief Finds a supported format from a list of candidates.
  *
@@ -2329,7 +2896,10 @@ void VulkanRenderer::SetPolygonMode(VkCommandBuffer commandBuffer, VkPolygonMode
 
 
 
+<<<<<<< HEAD
 
+=======
+>>>>>>> Testing
 /**
  * @brief Creates a Vulkan debug messenger for logging and debugging purposes.
  *
